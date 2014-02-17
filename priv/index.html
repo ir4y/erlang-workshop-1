@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <script src="/static/jquery-2.0.3.min.js"></script>
+        <script src="/static/bullet.js"></script>
+        <script>
+            $(document).ready(function(){
+                $('#connect').click(function(){
+                    var bullet = $.bullet($('#url').val());
+                    bullet.onopen = function(){
+                        console.log('bullet: opened');
+                    };
+                    bullet.ondisconnect = function(){
+                        console.log('bullet: disconnected');
+                    };
+                    bullet.onclose = function(){
+                        console.log('bullet: closed');
+                    };
+                    bullet.onmessage = function(e){
+                        json = JSON.parse(e.data);
+                        console.log(json);
+                        string_json = JSON.stringify(json, undefined, 2);
+                        var element = $("<span>" + string_json +"</span><br/>");
+                        $('div.output').prepend(element);
+                    };
+                    bullet.onheartbeat = function(){
+                        bullet.send('ping');
+                    }
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <input style="width:500px;" value="ws://localhost:8008/pubsub/test" id="url">
+        <button id="connect">Connect</button>
+        <br/>
+        <div class="output"></div>
+    </body>
+</html>
