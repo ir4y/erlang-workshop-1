@@ -8,6 +8,8 @@
                     var bullet = $.bullet($('#url').val());
                     bullet.onopen = function(){
                         console.log('bullet: opened');
+                        var element = $("<span>" + 'bullet: opened' +"</span><br/>");
+                        $('div.output').prepend(element);
                     };
                     bullet.ondisconnect = function(){
                         console.log('bullet: disconnected');
@@ -16,10 +18,7 @@
                         console.log('bullet: closed');
                     };
                     bullet.onmessage = function(e){
-                        json = JSON.parse(e.data);
-                        console.log(json);
-                        string_json = JSON.stringify(json, undefined, 2);
-                        var element = $("<span>" + string_json +"</span><br/>");
+                        var element = $("<span>" + e.data +"</span><br/>");
                         $('div.output').prepend(element);
                     };
                     bullet.onheartbeat = function(){
