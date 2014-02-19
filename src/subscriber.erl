@@ -39,14 +39,14 @@ init([]) ->
 handle_call({subscribe, Channel}, From, State) ->
     io:format("Subscribed to ~p~n", [Channel]),
     ok = eredis_sub:subscribe(State#state.subscribe, [Channel]),
-    {reply, ok, State#state{clients=State#state.clients++[{Channel,From}]}};
+    {reply, ok, State#state{clients=State#state.clients ++ [{Channel, From}]}};
 handle_call({unsubscribe, Channel}, From, State) ->
     io:format("Unsubscribed to ~p~n", [Channel]),
     case erlang:length([SubChannel || {SubChannel, _} <- State#state.clients, Channel =:= SubChannel]) of
         0 -> ok = eredis_sub:unsubscribe(State#state.subscribe, [Channel]);
         _ -> ok
     end,
-    {reply, ok, State#state{clients=State#state.clients--[{Channel,From}]}};
+    {reply, ok, State#state{clients=State#state.clients -- [{Channel, From}]}};
 
 handle_call(_Request, _From, State) ->
     Reply = ok,
@@ -70,7 +70,3 @@ terminate(_Reason, _State) ->
 
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
-
-%%%===================================================================
-%%% Internal functions
-%%%===================================================================
