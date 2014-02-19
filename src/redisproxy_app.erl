@@ -10,6 +10,7 @@
 %% ===================================================================
 
 start(_StartType, _StartArgs) ->
+    subscriber:start_link(),
     Dispatch = cowboy_router:compile([
                 {'_', [
                         {"/pubsub/:channel", bullet_handler, [{handler, pubsub_stream_handler}]},
@@ -21,6 +22,5 @@ start(_StartType, _StartArgs) ->
     {ok, _} = cowboy:start_http(
             http, 100, [{ip, Ip}, {port, Port}], [{env, [{dispatch, Dispatch}]}]),
     redisproxy_sup:start_link().
-
 stop(_State) ->
     ok.
