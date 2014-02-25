@@ -20,7 +20,6 @@ stream(_Data, Req, State) ->
 	{ok, Req, State}.
 
 info({message, _Channel, Mes, _Pid}, Req, State) ->
-    io:format("Get message ~p~n", [Mes]),
     {reply, Mes, Req, State};
 info(Info, Req, State) ->
 	io:format("info received ~p~n", [Info]),
